@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBA Custom Rankings</title>
+    <style>
+        :root {
+            --bg: #04070d;
+            --bg-accent: #07111d;
+            --card: rgba(3, 10, 18, 0.92);
+            --card-solid: #050b14;
+            --text: #d9f7ff;
+            --muted: #8fb9c8;
+            --subtle: #5f8794;
+            --input-bg: #07131f;
+            --input-border: rgba(0, 221, 255, 0.25);
+            --table-head: #0a1726;
+            --table-row: rgba(0, 255, 255, 0.015);
+            --table-row-hover: rgba(0, 238, 255, 0.08);
+            --border: rgba(0, 238, 255, 0.18);
+            --primary: #00d9ff;
+            --primary-hover: #00b8d9;
+            --primary-text: #021018;
+            --shadow: 0 0 0 1px rgba(0, 238, 255, 0.14), 0 0 28px rgba(0, 217, 255, 0.08);
+            --glow:
+                radial-gradient(circle at top left, rgba(0, 217, 255, 0.10), transparent 30%),
+                radial-gradient(circle at top right, rgba(0, 100, 255, 0.08), transparent 25%);
+        }
+
+        body.light-mode {
+            --bg: #f4f8fc;
+            --bg-accent: #dfe9f3;
+            --card: rgba(255, 255, 255, 0.94);
+            --card-solid: #ffffff;
+            --text: #0f172a;
+            --muted: #334155;
+            --subtle: #64748b;
+            --input-bg: #f8fafc;
+            --input-border: rgba(37, 99, 235, 0.20);
+            --table-head: #e8eef6;
+            --table-row: rgba(15, 23, 42, 0.015);
+            --table-row-hover: rgba(37, 99, 235, 0.07);
+            --border: rgba(15, 23, 42, 0.12);
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --primary-text: #ffffff;
+            --shadow: 0 14px 36px rgba(15, 23, 42, 0.08);
+            --glow:
+                radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 30%),
+                radial-gradient(circle at top right, rgba(14, 165, 233, 0.07), transparent 25%);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Orbitron", "Rajdhani", Arial, sans-serif;
+            background:
+                linear-gradient(rgba(0, 217, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 217, 255, 0.05) 1px, transparent 1px),
+                var(--glow),
+                linear-gradient(135deg, var(--bg), var(--bg-accent));
+            background-size: 48px 48px, 48px 48px, auto, auto;
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            transition: background 0.25s ease, color 0.25s ease;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 32px auto;
+            padding: 20px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-block h1 {
+            margin: 0 0 8px 0;
+            font-size: 2rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--primary);
+            text-shadow: 0 0 14px rgba(0, 217, 255, 0.25);
+        }
+
+        .brand-block p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.98rem;
+            letter-spacing: 0.02em;
+        }
+
+        .toggle-btn {
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text);
+            padding: 10px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: 0.2s ease;
+        }
+
+        .toggle-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(8px);
+            transition: background 0.25s ease, border-color 0.25s ease;
+        }
+
+        .section-title {
+            margin: 0 0 20px 0;
+            font-size: 1.1rem;
+            color: var(--text);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-weight: 700;
+            color: var(--muted);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        input {
+            padding: 12px 14px;
+            border-radius: 4px;
+            border: 1px solid var(--input-border);
+            background: var(--input-bg);
+            color: var(--text);
+            font-size: 0.98rem;
+            outline: none;
+            transition: 0.2s ease;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.10);
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 6px;
+            margin-bottom: 8px;
+        }
+
+        button {
+            padding: 12px 18px;
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            border-radius: 4px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.2s ease;
+            font-size: 0.96rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        button:hover {
+            background: rgba(0, 217, 255, 0.10);
+            transform: translateY(-1px);
+        }
+
+        .secondary-btn {
+            color: var(--text);
+            border-color: var(--border);
+        }
+
+        .secondary-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(0, 217, 255, 0.06);
+        }
+
+        .results-wrap {
+            margin-top: 28px;
+        }
+
+        .table-shell {
+            overflow-x: auto;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--card-solid);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 920px;
+        }
+
+        thead th {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            background: var(--table-head);
+            color: var(--text);
+            text-align: left;
+            padding: 16px 14px;
+            font-size: 1rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tbody td {
+            padding: 16px 14px;
+            border-bottom: 1px solid rgba(0, 238, 255, 0.12);
+            color: var(--muted);
+            font-size: 0.98rem;
+        }
+
+        tbody tr:nth-child(odd) {
+            background: var(--table-row);
+        }
+
+        tbody tr:hover {
+            background: var(--table-row-hover);
+        }
+
+        .footer-note {
+            margin-top: 14px;
+            color: var(--subtle);
+            font-size: 0.9rem;
+            letter-spacing: 0.03em;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                margin: 18px auto;
+                padding: 14px;
+            }
+
+            .card {
+                padding: 20px;
+                border-radius: 8px;
+            }
+
+            .brand-block h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="topbar">
+            <div class="brand-block">
+                <h1>Custom NBA Player Rankings</h1>
+                <p>Adjust how much you value each stat, then generate your own rankings.</p>
+            </div>
+            <button class="toggle-btn" id="themeToggle" type="button">🌙 Dark Mode</button>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">Stat Weights</h2>
+
+            <form method="POST">
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="points_per_game">Points Per Game</label>
+                        <input type="number" name="points_per_game" value="{{ weights.points_per_game }}" data-default="{{ weights.points_per_game }}">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="assists_per_game">Assists Per Game</label>
+                        <input type="number" name="assists_per_game" value="{{ weights.assists_per_game }}" data-default="{{ weights.assists_per_game }}">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="rebounds_per_game">Rebounds Per Game</label>
+                        <input type="number" name="rebounds_per_game" value="{{ weights.rebounds_per_game }}" data-default="{{ weights.rebounds_per_game }}">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="games_played">Games Played</label>
+                        <input type="number" name="games_played" value="{{ weights.games_played }}" data-default="{{ weights.games_played }}">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="fg_pct">Field Goal %</label>
+                        <input type="number" step="0.1" name="fg_pct" value="{{ weights.fg_pct }}" data-default="{{ weights.fg_pct }}">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="turnovers_per_game">Turnovers Per Game</label>
+                        <input type="number" name="turnovers_per_game" value="{{ weights.turnovers_per_game }}" data-default="{{ weights.turnovers_per_game }}">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="steals_per_game">Steals Per Game</label>
+                        <input type="number" name="steals_per_game" value="{{ weights.steals_per_game }}" data-default="{{ weights.steals_per_game }}">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="blocks_per_game">Blocks Per Game</label>
+                        <input type="number" name="blocks_per_game" value="{{ weights.blocks_per_game }}" data-default="{{ weights.blocks_per_game }}">
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button type="submit">Generate Rankings</button>
+                    <button type="button" class="secondary-btn" onclick="resetWeights()">Reset Fields</button>
+                </div>
+            </form>
+
+            {% if rankings %}
+                <div class="results-wrap">
+                    <h2 class="section-title">Top Rankings</h2>
+                    <div class="table-shell">
+                        <table>
+                            <thead>
+                                <tr>
+                                    {% for key in rankings[0].keys() %}
+                                        <th>{{ key }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for player in rankings %}
+                                    <tr>
+                                        {% for key, value in player.items() %}
+                                            <td>{{ value }}</td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="footer-note">
+                        Results update based on the stat weights you submit.
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        const body = document.body;
+        const toggleBtn = document.getElementById("themeToggle");
+
+        function applyTheme(theme) {
+            if (theme === "light") {
+                body.classList.add("light-mode");
+                toggleBtn.textContent = "☀️ Light Mode";
+            } else {
+                body.classList.remove("light-mode");
+                toggleBtn.textContent = "🌙 Dark Mode";
+            }
+        }
+
+        const savedTheme = localStorage.getItem("theme") || "dark";
+        applyTheme(savedTheme);
+
+        toggleBtn.addEventListener("click", () => {
+            const nextTheme = body.classList.contains("light-mode") ? "dark" : "light";
+            localStorage.setItem("theme", nextTheme);
+            applyTheme(nextTheme);
+        });
+
+        function resetWeights() {
+            const defaults = {
+                points_per_game: 40,
+                assists_per_game: 20,
+                rebounds_per_game: 15,
+                games_played: 15,
+                fg_pct: 10,
+                turnovers_per_game: 10,
+                steals_per_game: 10,
+                blocks_per_game: 10
+            };
+
+            Object.keys(defaults).forEach(name => {
+                const input = document.querySelector(`input[name="${name}"]`);
+                if (input) {
+                    input.value = defaults[name];
+                }
+            });
+        }
+    </script>
+</body>
+</html>
