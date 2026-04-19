@@ -172,6 +172,28 @@
             box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.10);
         }
 
+        input[type="range"] {
+            flex: 1;
+            min-width: 120px;
+            padding: 0;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        input[type="number"].weight-value {
+            width: 74px;
+            padding: 10px 8px;
+            text-align: center;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .slider-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
         .actions {
             display: flex;
             gap: 12px;
@@ -241,6 +263,36 @@
             border-bottom: 1px solid var(--border);
         }
 
+        thead th.sortable {
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.2s ease, background 0.2s ease;
+        }
+
+        thead th.sortable:hover,
+        thead th.sorted {
+            color: var(--primary);
+            background: rgba(0, 217, 255, 0.08);
+        }
+
+        thead th.sortable::after {
+            content: "↕";
+            display: inline-block;
+            margin-left: 8px;
+            color: var(--subtle);
+            font-size: 0.8rem;
+        }
+
+        thead th.sorted-asc::after {
+            content: "↑";
+            color: var(--primary);
+        }
+
+        thead th.sorted-desc::after {
+            content: "↓";
+            color: var(--primary);
+        }
+
         tbody td {
             padding: 16px 14px;
             border-bottom: 1px solid rgba(0, 238, 255, 0.12);
@@ -254,6 +306,23 @@
 
         tbody tr:hover {
             background: var(--table-row-hover);
+        }
+        tbody tr:nth-child(1) {
+        background: rgba(255, 215, 0, 0.15);
+        color: gold;
+        font-weight: bold;
+        }
+
+        tbody tr:nth-child(2) {
+        background: rgba(192, 192, 192, 0.15);
+        color: silver;
+        font-weight: bold;
+        }
+
+        tbody tr:nth-child(3) {
+        background: rgba(205, 127, 50, 0.15);
+        color: #cd7f32;
+        font-weight: bold;
         }
 
         .footer-note {
@@ -297,42 +366,74 @@
                 <div class="form-grid">
                     <div class="input-group">
                         <label for="points_per_game">Points Per Game</label>
-                        <input type="number" name="points_per_game" value="{{ weights.points_per_game }}" data-default="{{ weights.points_per_game }}">
+                        <div class="slider-row">
+                            <input id="points_per_game" type="range" min="0" max="100" step="1" name="points_per_game" value="{{ weights.points_per_game }}" data-default="{{ weights.points_per_game }}">
+                            <input class="weight-value" id="points_per_game_value" type="number" min="0" max="100" step="1" value="{{ weights.points_per_game }}" aria-label="Points Per Game weight">
+                        </div>
                     </div>
 
                     <div class="input-group">
                         <label for="assists_per_game">Assists Per Game</label>
-                        <input type="number" name="assists_per_game" value="{{ weights.assists_per_game }}" data-default="{{ weights.assists_per_game }}">
+                        <div class="slider-row">
+                            <input id="assists_per_game" type="range" min="0" max="100" step="1" name="assists_per_game" value="{{ weights.assists_per_game }}" data-default="{{ weights.assists_per_game }}">
+                            <input class="weight-value" id="assists_per_game_value" type="number" min="0" max="100" step="1" value="{{ weights.assists_per_game }}" aria-label="Assists Per Game weight">
+                        </div>
                     </div>
 
                     <div class="input-group">
                         <label for="rebounds_per_game">Rebounds Per Game</label>
-                        <input type="number" name="rebounds_per_game" value="{{ weights.rebounds_per_game }}" data-default="{{ weights.rebounds_per_game }}">
+                        <div class="slider-row">
+                            <input id="rebounds_per_game" type="range" min="0" max="100" step="1" name="rebounds_per_game" value="{{ weights.rebounds_per_game }}" data-default="{{ weights.rebounds_per_game }}">
+                            <input class="weight-value" id="rebounds_per_game_value" type="number" min="0" max="100" step="1" value="{{ weights.rebounds_per_game }}" aria-label="Rebounds Per Game weight">
+                        </div>
                     </div>
 
                     <div class="input-group">
                         <label for="games_played">Games Played</label>
-                        <input type="number" name="games_played" value="{{ weights.games_played }}" data-default="{{ weights.games_played }}">
+                        <div class="slider-row">
+                            <input id="games_played" type="range" min="0" max="100" step="1" name="games_played" value="{{ weights.games_played }}" data-default="{{ weights.games_played }}">
+                            <input class="weight-value" id="games_played_value" type="number" min="0" max="100" step="1" value="{{ weights.games_played }}" aria-label="Games Played weight">
+                        </div>
                     </div>
 
                     <div class="input-group">
                         <label for="fg_pct">Field Goal %</label>
-                        <input type="number" step="0.1" name="fg_pct" value="{{ weights.fg_pct }}" data-default="{{ weights.fg_pct }}">
+                        <div class="slider-row">
+                            <input id="fg_pct" type="range" min="0" max="100" step="0.1" name="fg_pct" value="{{ weights.fg_pct }}" data-default="{{ weights.fg_pct }}">
+                            <input class="weight-value" id="fg_pct_value" type="number" min="0" max="100" step="0.1" value="{{ weights.fg_pct }}" aria-label="Field Goal percentage weight">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="fg3_pct">3PT Shooting %</label>
+                        <div class="slider-row">
+                            <input id="fg3_pct" type="range" min="0" max="100" step="0.1" name="fg3_pct" value="{{ weights.fg3_pct }}" data-default="{{ weights.fg3_pct }}">
+                            <input class="weight-value" id="fg3_pct_value" type="number" min="0" max="100" step="0.1" value="{{ weights.fg3_pct }}" aria-label="Three-point shooting percentage weight">
+                        </div>
                     </div>
 
                     <div class="input-group">
                         <label for="turnovers_per_game">Turnovers Per Game</label>
-                        <input type="number" name="turnovers_per_game" value="{{ weights.turnovers_per_game }}" data-default="{{ weights.turnovers_per_game }}">
+                        <div class="slider-row">
+                            <input id="turnovers_per_game" type="range" min="0" max="100" step="1" name="turnovers_per_game" value="{{ weights.turnovers_per_game }}" data-default="{{ weights.turnovers_per_game }}">
+                            <input class="weight-value" id="turnovers_per_game_value" type="number" min="0" max="100" step="1" value="{{ weights.turnovers_per_game }}" aria-label="Turnovers Per Game weight">
+                        </div>
                     </div>
 
                     <div class="input-group">
                         <label for="steals_per_game">Steals Per Game</label>
-                        <input type="number" name="steals_per_game" value="{{ weights.steals_per_game }}" data-default="{{ weights.steals_per_game }}">
+                        <div class="slider-row">
+                            <input id="steals_per_game" type="range" min="0" max="100" step="1" name="steals_per_game" value="{{ weights.steals_per_game }}" data-default="{{ weights.steals_per_game }}">
+                            <input class="weight-value" id="steals_per_game_value" type="number" min="0" max="100" step="1" value="{{ weights.steals_per_game }}" aria-label="Steals Per Game weight">
+                        </div>
                     </div>
 
                     <div class="input-group">
                         <label for="blocks_per_game">Blocks Per Game</label>
-                        <input type="number" name="blocks_per_game" value="{{ weights.blocks_per_game }}" data-default="{{ weights.blocks_per_game }}">
+                        <div class="slider-row">
+                            <input id="blocks_per_game" type="range" min="0" max="100" step="1" name="blocks_per_game" value="{{ weights.blocks_per_game }}" data-default="{{ weights.blocks_per_game }}">
+                            <input class="weight-value" id="blocks_per_game_value" type="number" min="0" max="100" step="1" value="{{ weights.blocks_per_game }}" aria-label="Blocks Per Game weight">
+                        </div>
                     </div>
                 </div>
 
@@ -350,7 +451,7 @@
                             <thead>
                                 <tr>
                                     {% for key in rankings[0].keys() %}
-                                        <th>{{ key }}</th>
+                                        <th class="sortable" scope="col" data-sort-direction="none">{{ key }}</th>
                                     {% endfor %}
                                 </tr>
                             </thead>
@@ -396,6 +497,100 @@
             applyTheme(nextTheme);
         });
 
+        function clampValue(value, min, max) {
+            const numericValue = Number(value);
+
+            if (Number.isNaN(numericValue)) {
+                return min;
+            }
+
+            return Math.min(Math.max(numericValue, min), max);
+        }
+
+        function syncWeightControls() {
+            document.querySelectorAll('input[type="range"][name]').forEach(slider => {
+                const valueInput = document.getElementById(`${slider.name}_value`);
+
+                if (!valueInput) {
+                    return;
+                }
+
+                slider.addEventListener("input", () => {
+                    valueInput.value = slider.value;
+                });
+
+                valueInput.addEventListener("input", () => {
+                    if (valueInput.value === "" || Number.isNaN(Number(valueInput.value))) {
+                        return;
+                    }
+
+                    slider.value = valueInput.value;
+                });
+
+                valueInput.addEventListener("change", () => {
+                    const clampedValue = clampValue(valueInput.value, Number(slider.min), Number(slider.max));
+                    valueInput.value = clampedValue;
+                    slider.value = clampedValue;
+                });
+            });
+        }
+
+        syncWeightControls();
+
+        function parseCellValue(value) {
+            const cleanedValue = value.trim().replace(/,/g, "");
+            const numericValue = Number(cleanedValue);
+
+            return cleanedValue !== "" && !Number.isNaN(numericValue)
+                ? numericValue
+                : value.trim().toLowerCase();
+        }
+
+        function compareCellValues(firstValue, secondValue, direction) {
+            const firstParsed = parseCellValue(firstValue);
+            const secondParsed = parseCellValue(secondValue);
+            const modifier = direction === "asc" ? 1 : -1;
+
+            if (typeof firstParsed === "number" && typeof secondParsed === "number") {
+                return (firstParsed - secondParsed) * modifier;
+            }
+
+            return String(firstParsed).localeCompare(String(secondParsed)) * modifier;
+        }
+
+        function sortTableByColumn(header) {
+            const table = header.closest("table");
+            const tableBody = table.querySelector("tbody");
+            const headers = Array.from(table.querySelectorAll("thead th"));
+            const columnIndex = headers.indexOf(header);
+            const nextDirection = header.dataset.sortDirection === "asc" ? "desc" : "asc";
+            const rows = Array.from(tableBody.querySelectorAll("tr"));
+
+            rows.sort((firstRow, secondRow) => {
+                const firstValue = firstRow.children[columnIndex]?.textContent || "";
+                const secondValue = secondRow.children[columnIndex]?.textContent || "";
+
+                return compareCellValues(firstValue, secondValue, nextDirection);
+            });
+
+            headers.forEach(tableHeader => {
+                tableHeader.dataset.sortDirection = "none";
+                tableHeader.classList.remove("sorted", "sorted-asc", "sorted-desc");
+            });
+
+            header.dataset.sortDirection = nextDirection;
+            header.classList.add("sorted", `sorted-${nextDirection}`);
+            rows.forEach(row => tableBody.appendChild(row));
+        }
+
+        function enableTableSorting() {
+            document.querySelectorAll("th.sortable").forEach(header => {
+                header.addEventListener("click", () => sortTableByColumn(header));
+            });
+        }
+
+        enableTableSorting();
+
         function resetWeights() {
             const defaults = {
                 points_per_game: 40,
@@ -403,15 +598,20 @@
                 rebounds_per_game: 15,
                 games_played: 15,
                 fg_pct: 10,
+                fg3_pct: 10,
                 turnovers_per_game: 10,
                 steals_per_game: 10,
                 blocks_per_game: 10
             };
 
             Object.keys(defaults).forEach(name => {
-                const input = document.querySelector(`input[name="${name}"]`);
-                if (input) {
-                    input.value = defaults[name];
+                const slider = document.querySelector(`input[name="${name}"]`);
+                const valueInput = document.getElementById(`${name}_value`);
+                if (slider) {
+                    slider.value = defaults[name];
+                }
+                if (valueInput) {
+                    valueInput.value = defaults[name];
                 }
             });
         }
