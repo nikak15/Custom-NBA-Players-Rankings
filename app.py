@@ -8,6 +8,32 @@ df = pd.read_json("players_clean.json")
 
 # Stats where LOWER is better
 negative_stats = {"turnovers_per_game"}
+ranking_stats = [
+    "points_per_game",
+    "assists_per_game",
+    "rebounds_per_game",
+    "games_played",
+    "fg_pct",
+    "fg3_pct",
+    "turnovers_per_game",
+    "steals_per_game",
+    "blocks_per_game",
+]
+
+
+def clean_player_data(dataframe):
+    cleaned_df = dataframe.copy()
+    cleaned_df["fg3_pct"] = cleaned_df["fg3_pct"].fillna(0)
+
+    return cleaned_df[
+        cleaned_df["player_name"].ne("League Average")
+        & cleaned_df["team"].notna()
+        & cleaned_df["position"].notna()
+        & cleaned_df[ranking_stats].notna().all(axis=1)
+    ].copy()
+
+
+df = clean_player_data(df)
 
 
 def normalize_column(series, reverse=False):
@@ -57,6 +83,7 @@ def index():
         "rebounds_per_game": 15,
         "games_played": 15,
         "fg_pct": 10,
+        "fg3_pct": 10,
         "turnovers_per_game": 10,
         "steals_per_game": 10,
         "blocks_per_game": 10,
@@ -64,14 +91,8 @@ def index():
 
     if request.method == "POST":
         weights = {
-            "points_per_game": float(request.form.get("points_per_game", 0)),
-            "assists_per_game": float(request.form.get("assists_per_game", 0)),
-            "rebounds_per_game": float(request.form.get("rebounds_per_game", 0)),
-            "games_played": float(request.form.get("games_played", 0)),
-            "fg_pct": float(request.form.get("fg_pct", 0)),
-            "turnovers_per_game": float(request.form.get("turnovers_per_game", 0)),
-            "steals_per_game": float(request.form.get("steals_per_game", 0)),
-            "blocks_per_game": float(request.form.get("blocks_per_game", 0))
+            stat: float(request.form.get(stat, 0))
+            for stat in ranking_stats
         }
 
         ranked_df = generate_rankings(df, weights)
@@ -80,6 +101,7 @@ def index():
 
         display_df = ranked_df.rename(columns={
             "rank": "Rank",
+            "position": "Position",
             "player_name": "Player",
             "team": "Team",
             "ranking_score": "Score",
@@ -88,13 +110,14 @@ def index():
             "rebounds_per_game": "RPG",
             "games_played": "Games",
             "fg_pct": "FG%",
+            "fg3_pct": "3P%",
             "turnovers_per_game": "TOV",
             "steals_per_game": "SPG",
             "blocks_per_game": "BPG"
         })
 
         rankings = display_df[
-            ["Rank", "Player", "Team", "Score", "PPG", "APG", "RPG", "SPG", "BPG", "Games", "FG%", "TOV"]
+            ["Rank", "Position", "Player", "Team", "Score", "PPG", "APG", "RPG", "SPG", "BPG", "Games", "FG%", "3P%", "TOV"]
         ].head(750).to_dict(orient="records")
 
         default_weights = weights
