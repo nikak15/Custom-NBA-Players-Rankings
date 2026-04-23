@@ -101,6 +101,13 @@
             letter-spacing: 0.02em;
         }
 
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
         .toggle-btn {
             border: 1px solid var(--border);
             background: transparent;
@@ -115,6 +122,15 @@
         .toggle-btn:hover {
             border-color: var(--primary);
             color: var(--primary);
+        }
+
+        .compare-btn {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.16), rgba(139, 92, 246, 0.18));
+            border-color: rgba(129, 140, 248, 0.35);
+        }
+
+        .compare-btn:hover {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.22), rgba(139, 92, 246, 0.24));
         }
 
         .card {
@@ -332,6 +348,316 @@
             letter-spacing: 0.03em;
         }
 
+        .click-hint {
+            margin-top: 10px;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        tbody tr.player-row {
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        tbody tr.player-row:hover {
+            transform: translateY(-1px);
+        }
+
+        .chart-modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(2, 8, 16, 0.78);
+            z-index: 20;
+        }
+
+        .chart-modal.open {
+            display: flex;
+        }
+
+        .chart-panel {
+            width: min(960px, 100%);
+            max-height: 90vh;
+            overflow-y: auto;
+            background: var(--card-solid);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            padding: 24px;
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .chart-header h3 {
+            margin: 0 0 8px 0;
+            font-size: 1.3rem;
+            letter-spacing: 0.04em;
+        }
+
+        .chart-header p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .chart-close {
+            min-width: 44px;
+            padding: 10px 14px;
+        }
+
+        .chart-layout {
+            display: grid;
+            grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+            gap: 34px;
+            align-items: start;
+        }
+
+        .pie-chart-wrap {
+            display: flex;
+            justify-content: center;
+        }
+
+        .pie-chart {
+            width: 360px;
+            aspect-ratio: 1 / 1;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            box-shadow:
+                0 18px 40px rgba(0, 0, 0, 0.22),
+                inset 0 0 0 18px rgba(2, 8, 16, 0.16);
+            position: relative;
+            background: conic-gradient(var(--primary) 0deg 360deg);
+        }
+
+        .pie-chart::after {
+            content: "";
+            position: absolute;
+            inset: 29%;
+            border-radius: 50%;
+            background: var(--card-solid);
+            border: 1px solid var(--border);
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.03);
+        }
+
+        .pie-center-label {
+            position: absolute;
+            inset: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            text-align: center;
+            width: 56%;
+        }
+
+        .pie-center-label strong {
+            display: block;
+            font-size: 2.3rem;
+            color: var(--text);
+        }
+
+        .pie-center-label span {
+            color: var(--subtle);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .breakdown-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .breakdown-item {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr) auto auto;
+            gap: 12px;
+            align-items: center;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .breakdown-swatch {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+        }
+
+        .breakdown-label {
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        .breakdown-value,
+        .breakdown-share {
+            color: var(--muted);
+            font-variant-numeric: tabular-nums;
+            text-align: right;
+        }
+
+        .compare-modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(2, 8, 16, 0.8);
+            z-index: 25;
+        }
+
+        .compare-modal.open {
+            display: flex;
+        }
+
+        .compare-panel {
+            width: min(1120px, 100%);
+            max-height: 92vh;
+            overflow-y: auto;
+            background: linear-gradient(180deg, rgba(5, 11, 20, 0.98), rgba(7, 16, 27, 0.98));
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 26px;
+        }
+
+        .compare-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .compare-header h3 {
+            margin: 0 0 8px 0;
+            font-size: 1.3rem;
+            letter-spacing: 0.05em;
+        }
+
+        .compare-header p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .compare-controls {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(220px, 1fr)) auto;
+            gap: 14px;
+            align-items: end;
+            margin-bottom: 24px;
+        }
+
+        .compare-search {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .compare-search input {
+            width: 100%;
+        }
+
+        .compare-table-shell {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 760px;
+        }
+
+        .compare-table th,
+        .compare-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .compare-table th {
+            background: rgba(56, 189, 248, 0.07);
+            color: var(--text);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 0.86rem;
+        }
+
+        .compare-table td {
+            color: var(--muted);
+            font-size: 0.97rem;
+        }
+
+        .compare-player-cell {
+            width: 32%;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .compare-stat-cell {
+            width: 18%;
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        .compare-diff-cell {
+            width: 18%;
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .compare-player-name {
+            display: block;
+            color: var(--text);
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .compare-player-meta {
+            color: var(--subtle);
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .compare-winner {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(34, 197, 94, 0.14);
+            color: #86efac;
+            font-weight: 700;
+            font-size: 0.84rem;
+        }
+
+        .compare-tie {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(148, 163, 184, 0.12);
+            color: var(--muted);
+            font-weight: 700;
+            font-size: 0.84rem;
+        }
+
+        .compare-empty {
+            padding: 24px;
+            text-align: center;
+            color: var(--subtle);
+            border: 1px dashed var(--border);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.015);
+        }
+
         @media (max-width: 700px) {
             .container {
                 margin: 18px auto;
@@ -346,6 +672,39 @@
             .brand-block h1 {
                 font-size: 1.5rem;
             }
+
+            .chart-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-panel {
+                padding: 18px;
+            }
+
+            .pie-chart {
+                width: min(78vw, 320px);
+            }
+
+            .breakdown-item {
+                grid-template-columns: auto minmax(0, 1fr);
+            }
+
+            .breakdown-value,
+            .breakdown-share {
+                text-align: left;
+            }
+
+            .compare-controls {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar-actions {
+                width: 100%;
+            }
+
+            .compare-panel {
+                padding: 18px;
+            }
         }
     </style>
 </head>
@@ -356,7 +715,10 @@
                 <h1>Custom NBA Player Rankings</h1>
                 <p>Adjust how much you value each stat, then generate your own rankings.</p>
             </div>
-            <button class="toggle-btn" id="themeToggle" type="button">🌙 Dark Mode</button>
+            <div class="topbar-actions">
+                <button class="toggle-btn compare-btn" id="openCompareModal" type="button">Compare Players</button>
+                <button class="toggle-btn" id="themeToggle" type="button">🌙 Dark Mode</button>
+            </div>
         </div>
 
         <div class="card">
@@ -405,10 +767,10 @@
                     </div>
 
                     <div class="input-group">
-                        <label for="fg3_pct">3PT Shooting %</label>
+                        <label for="three_pt_shooting">3PT Shooting</label>
                         <div class="slider-row">
-                            <input id="fg3_pct" type="range" min="0" max="100" step="0.1" name="fg3_pct" value="{{ weights.fg3_pct }}" data-default="{{ weights.fg3_pct }}">
-                            <input class="weight-value" id="fg3_pct_value" type="number" min="0" max="100" step="0.1" value="{{ weights.fg3_pct }}" aria-label="Three-point shooting percentage weight">
+                            <input id="three_pt_shooting" type="range" min="0" max="100" step="0.1" name="three_pt_shooting" value="{{ weights.three_pt_shooting }}" data-default="{{ weights.three_pt_shooting }}">
+                            <input class="weight-value" id="three_pt_shooting_value" type="number" min="0" max="100" step="0.1" value="{{ weights.three_pt_shooting }}" aria-label="Three-point shooting weight">
                         </div>
                     </div>
 
@@ -450,22 +812,30 @@
                         <table>
                             <thead>
                                 <tr>
-                                    {% for key in rankings[0].keys() %}
+                                    {% for key in table_columns %}
                                         <th class="sortable" scope="col" data-sort-direction="none">{{ key }}</th>
                                     {% endfor %}
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for player in rankings %}
-                                    <tr>
-                                        {% for key, value in player.items() %}
-                                            <td>{{ value }}</td>
+                                    <tr
+                                        class="player-row"
+                                        tabindex="0"
+                                        role="button"
+                                        data-player-name="{{ player._player_name }}"
+                                        data-score-total="{{ player._score_total }}"
+                                        data-score-breakdown='{{ player._score_breakdown | tojson | safe }}'
+                                    >
+                                        {% for key in table_columns %}
+                                            <td>{{ player[key] }}</td>
                                         {% endfor %}
                                     </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
+                    <div class="click-hint">Click any player row to see how each stat contributes to that total score.</div>
                     <div class="footer-note">
                         Results update based on the stat weights you submit.
                     </div>
@@ -474,9 +844,96 @@
         </div>
     </div>
 
+    <div class="chart-modal" id="chartModal" aria-hidden="true">
+        <div class="chart-panel" role="dialog" aria-modal="true" aria-labelledby="chartTitle">
+            <div class="chart-header">
+                <div>
+                    <h3 id="chartTitle">Player Score Breakdown</h3>
+                    <p id="chartSubtitle">Select a player to view their score composition.</p>
+                </div>
+                <button type="button" class="chart-close" id="closeChartModal">Close</button>
+            </div>
+            <div class="chart-layout">
+                <div class="pie-chart-wrap">
+                    <div class="pie-chart" id="pieChart">
+                        <div class="pie-center-label">
+                            <strong id="pieChartTotal">0</strong>
+                            <span>Total Score</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="breakdown-list" id="breakdownList"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="compare-modal" id="compareModal" aria-hidden="true">
+        <div class="compare-panel" role="dialog" aria-modal="true" aria-labelledby="compareTitle">
+            <div class="compare-header">
+                <div>
+                    <h3 id="compareTitle">Player Comparison</h3>
+                    <p>Search for any two players and compare their stats side by side.</p>
+                </div>
+                <button type="button" class="chart-close" id="closeCompareModal">Close</button>
+            </div>
+
+            <div class="compare-controls">
+                <div class="compare-search">
+                    <label for="comparePlayerOne">Player One</label>
+                    <input id="comparePlayerOne" list="playerComparisonList" type="text" placeholder="Start typing a player name">
+                </div>
+
+                <div class="compare-search">
+                    <label for="comparePlayerTwo">Player Two</label>
+                    <input id="comparePlayerTwo" list="playerComparisonList" type="text" placeholder="Start typing a player name">
+                </div>
+
+                <button type="button" id="runPlayerCompare">Compare</button>
+            </div>
+
+            <datalist id="playerComparisonList">
+                {% for player in comparison_players %}
+                    <option value="{{ player.player_name }}">{{ player.player_name }} | {{ player.team }} | {{ player.position }}</option>
+                {% endfor %}
+            </datalist>
+
+            <div id="compareResults">
+                <div class="compare-empty">Choose two players to see who leads each stat and by how much.</div>
+            </div>
+        </div>
+    </div>
+
     <script>
         const body = document.body;
         const toggleBtn = document.getElementById("themeToggle");
+        const openCompareModalBtn = document.getElementById("openCompareModal");
+        const compareModal = document.getElementById("compareModal");
+        const closeCompareModalBtn = document.getElementById("closeCompareModal");
+        const runPlayerCompareBtn = document.getElementById("runPlayerCompare");
+        const comparePlayerOneInput = document.getElementById("comparePlayerOne");
+        const comparePlayerTwoInput = document.getElementById("comparePlayerTwo");
+        const compareResults = document.getElementById("compareResults");
+        const chartModal = document.getElementById("chartModal");
+        const closeChartModalBtn = document.getElementById("closeChartModal");
+        const pieChart = document.getElementById("pieChart");
+        const pieChartTotal = document.getElementById("pieChartTotal");
+        const chartTitle = document.getElementById("chartTitle");
+        const chartSubtitle = document.getElementById("chartSubtitle");
+        const breakdownList = document.getElementById("breakdownList");
+        const comparisonPlayers = {{ comparison_players | tojson | safe }};
+        const comparisonStatLabels = {{ comparison_stat_labels | tojson | safe }};
+        const comparisonStatOrder = {{ comparison_stat_order | tojson | safe }};
+        const chartColors = [
+            "#38bdf8",
+            "#0f766e",
+            "#8b5cf6",
+            "#f59e0b",
+            "#ef4444",
+            "#14b8a6",
+            "#f97316",
+            "#6366f1",
+            "#84cc16"
+        ];
 
         function applyTheme(theme) {
             if (theme === "light") {
@@ -496,6 +953,10 @@
             localStorage.setItem("theme", nextTheme);
             applyTheme(nextTheme);
         });
+
+        const comparisonPlayerMap = new Map(
+            comparisonPlayers.map(player => [player.player_name.toLowerCase(), player])
+        );
 
         function clampValue(value, min, max) {
             const numericValue = Number(value);
@@ -591,6 +1052,237 @@
 
         enableTableSorting();
 
+        function formatBreakdownValue(value) {
+            return Number(value).toFixed(2);
+        }
+
+        function formatBreakdownShare(value, total) {
+            if (!total) {
+                return "0.0%";
+            }
+
+            return `${((value / total) * 100).toFixed(1)}%`;
+        }
+
+        function buildChartGradient(breakdown, total) {
+            if (!total || !breakdown.length) {
+                return `conic-gradient(${chartColors[0]} 0deg 360deg)`;
+            }
+
+            let currentAngle = 0;
+            const segments = breakdown.map((item, index) => {
+                const sliceAngle = (item.value / total) * 360;
+                const startAngle = currentAngle;
+                const endAngle = currentAngle + sliceAngle;
+                currentAngle = endAngle;
+                return `${chartColors[index % chartColors.length]} ${startAngle}deg ${endAngle}deg`;
+            });
+
+            return `conic-gradient(${segments.join(", ")})`;
+        }
+
+        function renderBreakdown(playerName, totalScore, breakdown) {
+            const usableBreakdown = breakdown.filter(item => Number(item.value) > 0);
+            const chartData = usableBreakdown.length ? usableBreakdown : breakdown;
+
+            chartTitle.textContent = `${playerName} Score Breakdown`;
+            chartSubtitle.textContent = `Each slice shows how much a stat contributes to ${playerName}'s total ranking score.`;
+            pieChartTotal.textContent = formatBreakdownValue(totalScore);
+            pieChart.style.background = buildChartGradient(chartData, totalScore);
+            breakdownList.innerHTML = "";
+
+            chartData.forEach((item, index) => {
+                const row = document.createElement("div");
+                row.className = "breakdown-item";
+
+                row.innerHTML = `
+                    <span class="breakdown-swatch" style="background:${chartColors[index % chartColors.length]}"></span>
+                    <span class="breakdown-label">${item.label}</span>
+                    <span class="breakdown-value">${formatBreakdownValue(item.value)} pts</span>
+                    <span class="breakdown-share">${formatBreakdownShare(item.value, totalScore)}</span>
+                `;
+
+                breakdownList.appendChild(row);
+            });
+        }
+
+        function openChartModal(row) {
+            const playerName = row.dataset.playerName;
+            const totalScore = Number(row.dataset.scoreTotal || 0);
+            const breakdown = JSON.parse(row.dataset.scoreBreakdown || "[]");
+
+            renderBreakdown(playerName, totalScore, breakdown);
+            chartModal.classList.add("open");
+            chartModal.setAttribute("aria-hidden", "false");
+        }
+
+        function closeChartModal() {
+            chartModal.classList.remove("open");
+            chartModal.setAttribute("aria-hidden", "true");
+        }
+
+        function openCompareModal() {
+            compareModal.classList.add("open");
+            compareModal.setAttribute("aria-hidden", "false");
+            comparePlayerOneInput?.focus();
+        }
+
+        function closeCompareModal() {
+            compareModal.classList.remove("open");
+            compareModal.setAttribute("aria-hidden", "true");
+        }
+
+        function enablePlayerBreakdowns() {
+            document.querySelectorAll("tbody tr.player-row").forEach(row => {
+                row.addEventListener("click", () => openChartModal(row));
+                row.addEventListener("keydown", event => {
+                    if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        openChartModal(row);
+                    }
+                });
+            });
+        }
+
+        function formatComparisonValue(stat, value) {
+            if (value === null || value === undefined || Number.isNaN(Number(value))) {
+                return "N/A";
+            }
+
+            if (["fg_pct", "fg3_pct"].includes(stat)) {
+                return `${(Number(value) * 100).toFixed(1)}%`;
+            }
+
+            if (stat === "three_pt_shooting") {
+                return Number(value).toFixed(3);
+            }
+
+            return Number(value).toFixed(1);
+        }
+
+        function formatComparisonDifference(stat, firstValue, secondValue) {
+            const difference = Math.abs(Number(firstValue) - Number(secondValue));
+
+            if (["fg_pct", "fg3_pct"].includes(stat)) {
+                return `${(difference * 100).toFixed(1)} pts`;
+            }
+
+            if (stat === "three_pt_shooting") {
+                return difference.toFixed(3);
+            }
+
+            return difference.toFixed(1);
+        }
+
+        function statWinner(stat, firstValue, secondValue) {
+            if (firstValue === secondValue) {
+                return "tie";
+            }
+
+            const lowerIsBetter = stat === "turnovers_per_game";
+            if (lowerIsBetter) {
+                return firstValue < secondValue ? "first" : "second";
+            }
+
+            return firstValue > secondValue ? "first" : "second";
+        }
+
+        function buildComparisonResults(firstPlayer, secondPlayer) {
+            const rows = comparisonStatOrder.map(stat => {
+                const firstValue = Number(firstPlayer[stat]);
+                const secondValue = Number(secondPlayer[stat]);
+                const winner = statWinner(stat, firstValue, secondValue);
+
+                let middleContent = `<span class="compare-tie">Even</span>`;
+                if (winner !== "tie") {
+                    const winnerName = winner === "first" ? firstPlayer.player_name : secondPlayer.player_name;
+                    middleContent = `<span class="compare-winner">${winnerName} +${formatComparisonDifference(stat, firstValue, secondValue)}</span>`;
+                }
+
+                return `
+                    <tr>
+                        <td class="compare-player-cell">${formatComparisonValue(stat, firstValue)}</td>
+                        <td class="compare-diff-cell">${middleContent}</td>
+                        <td class="compare-player-cell">${formatComparisonValue(stat, secondValue)}</td>
+                        <td class="compare-stat-cell">${comparisonStatLabels[stat]}</td>
+                    </tr>
+                `;
+            }).join("");
+
+            compareResults.innerHTML = `
+                <div class="compare-table-shell">
+                    <table class="compare-table">
+                        <thead>
+                            <tr>
+                                <th class="compare-player-cell">
+                                    <span class="compare-player-name">${firstPlayer.player_name}</span>
+                                    <span class="compare-player-meta">${firstPlayer.team} | ${firstPlayer.position}</span>
+                                </th>
+                                <th class="compare-diff-cell">Difference</th>
+                                <th class="compare-player-cell">
+                                    <span class="compare-player-name">${secondPlayer.player_name}</span>
+                                    <span class="compare-player-meta">${secondPlayer.team} | ${secondPlayer.position}</span>
+                                </th>
+                                <th class="compare-stat-cell">Stat</th>
+                            </tr>
+                        </thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function runPlayerComparison() {
+            const firstPlayer = comparisonPlayerMap.get(comparePlayerOneInput.value.trim().toLowerCase());
+            const secondPlayer = comparisonPlayerMap.get(comparePlayerTwoInput.value.trim().toLowerCase());
+
+            if (!firstPlayer || !secondPlayer) {
+                compareResults.innerHTML = '<div class="compare-empty">Pick two valid player names from the search list to compare them.</div>';
+                return;
+            }
+
+            if (firstPlayer.player_name === secondPlayer.player_name) {
+                compareResults.innerHTML = '<div class="compare-empty">Choose two different players so the comparison is meaningful.</div>';
+                return;
+            }
+
+            buildComparisonResults(firstPlayer, secondPlayer);
+        }
+
+        if (chartModal) {
+            enablePlayerBreakdowns();
+            closeChartModalBtn?.addEventListener("click", closeChartModal);
+            chartModal.addEventListener("click", event => {
+                if (event.target === chartModal) {
+                    closeChartModal();
+                }
+            });
+            document.addEventListener("keydown", event => {
+                if (event.key === "Escape" && chartModal.classList.contains("open")) {
+                    closeChartModal();
+                }
+            });
+        }
+
+        if (compareModal) {
+            openCompareModalBtn?.addEventListener("click", openCompareModal);
+            closeCompareModalBtn?.addEventListener("click", closeCompareModal);
+            runPlayerCompareBtn?.addEventListener("click", runPlayerComparison);
+            compareModal.addEventListener("click", event => {
+                if (event.target === compareModal) {
+                    closeCompareModal();
+                }
+            });
+            [comparePlayerOneInput, comparePlayerTwoInput].forEach(input => {
+                input?.addEventListener("keydown", event => {
+                    if (event.key === "Enter") {
+                        event.preventDefault();
+                        runPlayerComparison();
+                    }
+                });
+            });
+        }
+
         function resetWeights() {
             const defaults = {
                 points_per_game: 40,
@@ -598,7 +1290,7 @@
                 rebounds_per_game: 15,
                 games_played: 15,
                 fg_pct: 10,
-                fg3_pct: 10,
+                three_pt_shooting: 10,
                 turnovers_per_game: 10,
                 steals_per_game: 10,
                 blocks_per_game: 10
